@@ -88,7 +88,7 @@ the result: Error message
 */
 command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
   local tError, unloadViewStack, msgsAreLocked, tStack, tGroup
-  local tCardIsView, tDefaultStack, tCurrCard
+  local tDefaultStack, tCurrCard
 
   if not _doesViewResolve(pViewKind) then throw kEmbeddableViewDoesNotExist & ":" && pViewKind
   put not _viewIsInMemory(pViewKind) into unloadViewStack
@@ -98,39 +98,31 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
   put the lockmessages into msgsAreLocked
   lock messages
   lock screen
-  # If card does not have a behavior set then just copy the first group on the embeddable view stack.
-  # The group is the embeddable view.
-  put _cardIsView(the long id of this card of stack pViewKind) into tCardIsView
 
-  if tCardIsView then
-    if pTargetObject begins with "stack" or pTargetObject begins with "card" then
-      put the defaultStack into tDefaultStack
-      set the defaultStack to the short name of tStack
-      if pTargetObject begins with "card" then
-        put the currentCard of tStack into tCurrCard
-        set the currentCard of tStack to the short name of pTargetObject
-      end if
-      create group
-      put it into tGroup
-    else if pTargetObject begins with "group" then
-      create group in pTargetObject
-      put it into tGroup
+  if pTargetObject begins with "stack" or pTargetObject begins with "card" then
+    put the defaultStack into tDefaultStack
+    set the defaultStack to the short name of tStack
+    if pTargetObject begins with "card" then
+      put the currentCard of tStack into tCurrCard
+      set the currentCard of tStack to the short name of pTargetObject
     end if
-    set the margins of tGroup to 0
-    set the borderwidth of tGroup to 0
-    set the showborder of tGroup to false
-
-    if pRect is not a rect then
-      local tLoc
-      put the loc of pTargetObject into tLoc
-      put item 1 of tLoc - 150 into item 1 of pRect
-      put item 2 of tLoc - 150 into item 2 of pRect
-      put item 1 of tLoc + 150 into item 3 of pRect
-      put item 2 of tLoc + 150 into item 4 of pRect
-    end if
-  else
-    copy group 1 of the this card of stack pViewKind to pTargetObject
+    create group
     put it into tGroup
+  else if pTargetObject begins with "group" then
+    create group in pTargetObject
+    put it into tGroup
+  end if
+  set the margins of tGroup to 0
+  set the borderwidth of tGroup to 0
+  set the showborder of tGroup to false
+
+  if pRect is not a rect then
+    local tLoc
+    put the loc of pTargetObject into tLoc
+    put item 1 of tLoc - 150 into item 1 of pRect
+    put item 2 of tLoc - 150 into item 2 of pRect
+    put item 1 of tLoc + 150 into item 3 of pRect
+    put item 2 of tLoc + 150 into item 4 of pRect
   end if
 
   set the uEmbeddableViewKind of tGroup to pViewKind
@@ -154,10 +146,8 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
 
   set the lockMessages to msgsAreLocked
 
-  if tCardIsView then
-    embedViewsInsertViewIntoInstance pViewKind, tGroup
-    put the result into tError
-  end if
+  embedViewsInsertViewIntoInstance pViewKind, tGroup
+  put the result into tError
   unlock screen
 
   if tError is empty then
@@ -183,7 +173,7 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
   if not _doesViewResolve(pViewKind) then throw kEmbeddableViewDoesNotExist & ":" && pViewKind
 
   if tError is empty then
-    local tTargetObject, tCardIsView
+    local tTargetObject
     local tRestoreLockLoc, unloadViewStack, msgsAreLocked
 
     lock screen
@@ -193,14 +183,11 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
     set the lockLoc of pGroupObject to true
 
     put the long id of this card of stack pViewKind into tTargetObject
-    put _cardIsView(the long id of this card of stack pViewKind) into tCardIsView
 
     embedViewsRemoveInstanceContents pGroupObject
 
     set the uEmbeddableViewKind of pGroupObject to pViewKind
-    if not tCardIsView then
-      set the behavior of pGroupObject to the behavior of group 1 of tTargetObject
-    else if the behavior of tTargetObject is not empty then
+    if the behavior of tTargetObject is not empty then
       set the behavior of pGroupObject to the behavior of tTargetObject
     end if
 
@@ -211,11 +198,6 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
 
     put the topleft of pGroupObject into tTopLeft
     put 5 into tWordOffset
-
-    if not tCardIsView then
-      put the long id of group 1 of tTargetObject into tTargetObject
-      put 9 into tWordOffset
-    end if
 
     repeat with i = 1 to the number of controls of tTargetObject
       # Only copy root controls
@@ -526,23 +508,6 @@ command embedViewsUpdateViewInstancesInStack pStackObject, pKind
     return tError for error
   end if
 end embedViewsUpdateViewInstancesInStack
-
-
-/**
-Summary: Returns true if the card of a stack should be used as the embeddable view.
-
-Description:
-If a card has a behavior or has more than one control at the root level then the
-card is considered the embeddable view.
-*/
-private function _cardIsView pCard
-  return the behavior of pCard is not empty \
-        or the number of controls of pCard <= 1 \
-        or the number of items of the groupIds of pCard > 1 \
-        or word 1 of the name of control 1 of pCard is not "group" \
-        or (word 1 the name of the last control of pCard is not "group" \
-          and word 1 of the owner of the last control of pCard is "card")
-end _cardIsView
 
 
 /**
