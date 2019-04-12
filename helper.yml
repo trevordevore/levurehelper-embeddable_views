@@ -1,0 +1,11 @@
+libraries:
+  - filename: embeddable-views_library.livecodescript
+frontscripts:
+  - filename: embeddable-views_frontscript.livecodescript
+    distribute: false
+register components:
+  - key: embeddable views
+    kind: ui
+    encrypt binary stacks: false
+    callback stackfile: embeddable-views_levure_callbacks.livecodescript
+packager callbacks stackfile: embeddable-views_levure_callbacks.livecodescript
