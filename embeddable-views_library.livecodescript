@@ -457,46 +457,6 @@ end _updateViewInstancesInNonViewAppUIStacks
 
 
 /**
-Summary: Updates all top level instances in open stacks. Pass in a kind to target specific embeddable view kind.
-
-Description:
-Does not update embeddable views in embeddable view stacks.
-
-Returns:
-it: Array whose keys are the long ids of stacks that were updated.
-the result: Error message
-*/
-private command _updateViewInstancesInOpenStacks pKind
-  local tError, tStack
-  local tUpdatedStacksA
-
-  repeat for each line tStack in the openStacks
-    if tStack is empty or embedViewsStackIsAView(tStack) then next repeat
-
-    embedViewsUpdateViewInstancesInStack the long id of stack tStack, pKind
-    put the result into tError
-
-    if tError is empty and it is true then
-      put empty into tUpdatedStacksA[ the long id of stack tStack ]
-      if the environment is "development" then
-        # Any embeddable views that are updated are automatically saved
-        revIDESaveStack the long id of stack tStack
-        put the result into tError
-      end if
-    end if
-
-    if tError is not empty then exit repeat
-  end repeat
-
-  if tError is empty then
-    return tUpdatedStacksA for value
-  else
-    return tError for error
-  end if
-end _updateViewInstancesInOpenStacks
-
-
-/**
 Summary: Updates view instances in a stack.
 
 Parameters:
