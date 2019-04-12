@@ -30,6 +30,8 @@ An instance of an embeddable view is simply a group. The group has an `uEmbeddab
 
 When you add an instance of an embeddable view to a card or group a new group is created and the contents of the embeddable view's card will are copied into the group. The behavior of the embeddable view card (if present) is assigned to the group as well.
 
+The `selectGroupedControls` property of the instance group will be set to `false` and the `clipsToRect` property will be set to `true`.
+
 ## Where do embeddable views go in a Levure app folder?
 
 Add the following entry to the `app.yml` file and place all embeddable view folders inside of the `./app/embeddable_views` folder.
