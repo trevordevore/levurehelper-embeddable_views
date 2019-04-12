@@ -64,7 +64,7 @@ function embedViewsGetKinds
 
   put levureAppGet(kPropertyKey) into tViewsA
   repeat with i = 1 to the number of elements of tViewsA
-    put tViewsA[i]["name"] & "," after tKinds
+    put tViewsA[i]["name"] & cr after tKinds
   end repeat
   return tKinds
 end embedViewsGetKinds
