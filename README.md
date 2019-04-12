@@ -49,7 +49,7 @@ To preview and insert embeddable views using a user interface install the [Baker
 
 When working in the LiveCode IDE a frontscript is inserted which keeps embeddable views up to date while you work. The stack is named `"Levure Embeddable Views Frontscript"` and has two handlers - `preOpenStack` and `saveStackRequest`. 
 
-### Refreshing instances of mbeddable Views when opening a stack
+### Refreshing instances of embeddable Views when opening a stack
 
 Whenever you open a stack in the IDE the `preOpenStack` handler calls `embedViewsUpdateViewInstancesInStack` which refreshes all top level instances of embeddable views within the stack.
 
