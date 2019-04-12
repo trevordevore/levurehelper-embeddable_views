@@ -1,6 +1,6 @@
 # embeddable_views
 
-Embeddable Views is a helper for Levure applications. It allow a LiveCode developer to embed the contents of a card in "instances" (groups with special properties) throughout their application. This introduces the following benefits:
+Embeddable Views is a helper for [Levure](https://github.com/trevordevore/levure) applications. It allow a [LiveCode](https://livecode.com) developer to embed the contents of a card in "instances" (groups with special properties) throughout their application. This introduces the following benefits:
 
 * A complex user interface can be worked on in smaller pieces – Complex interfaces can be made of up of many nested groups. This makes editing the UI more difficult. An embeddable view allows you to work on a single card of controls.
 * Edit a shared interface in one location – if your application uses the same interface in multiple locations you only have to edit one card.
@@ -38,6 +38,12 @@ Add the following entry to the `app.yml` file and place all embeddable view fold
 embeddable views:
   - folder: ./embeddable views
 ```
+
+## Inserting an embeddable view instance
+
+To insert a new instance of an embeddable view using code call [`embedViewsInsertViewIntoInstance`](#embedViewsInsertViewIntoInstance). 
+
+To preview and insert embeddable views using a user interface install the [Baker's Assistant](https://github.com/trevordevore/bakers-assistant) plugin.
 
 ## Keeping embeddable views up to date
 
