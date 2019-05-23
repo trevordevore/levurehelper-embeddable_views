@@ -99,6 +99,8 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
   lock messages
   lock screen
 
+  reset the templategroup
+
   if pTargetObject begins with "stack" or pTargetObject begins with "card" then
     put the defaultStack into tDefaultStack
     set the defaultStack to the short name of tStack
@@ -115,6 +117,8 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
   set the margins of tGroup to 0
   set the borderwidth of tGroup to 0
   set the showborder of tGroup to false
+  set the opaque of tGroup to false
+  set the showname of tGroup to false
   if the buildnumber >= 15500 then // 9.5dp-1
     set the layermode of tGroup to "container"
   end if
