@@ -71,6 +71,31 @@ end embedViewsGetKinds
 
 
 /**
+Summary: Returns the width and height of the embeddable view stack.
+
+Returns: Width,Height
+*/
+function embedViewsGetViewDimensions pViewKind
+  local unloadViewStack, msgsAreLocked, tRect
+
+  if not _doesViewResolve(pViewKind) then throw kEmbeddableViewDoesNotExist & ":" && pViewKind
+  put not _viewIsInMemory(pViewKind) into unloadViewStack
+
+  put the lockmessages into msgsAreLocked
+  lock messages
+
+  put the rect of card 1 of stack pViewKind into tRect
+
+  if unloadViewStack then
+    delete stack pViewKind
+  end if
+
+  set the lockmessages to msgsAreLocked
+  return item 3 of tRect & "," & item 4 of tRect
+end embedViewsGetViewDimensions
+
+
+/**
 Summary: Adds an embeddable view instance to the target object.
 
 Parameters:
