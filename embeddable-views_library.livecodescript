@@ -219,12 +219,8 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
     embedViewsRemoveInstanceContents pGroupObject
 
     set the uEmbeddableViewKind of pGroupObject to pViewKind
-
-    # Allow behavior to be set on card or stack of embeddable view
     if the behavior of tTargetObject is not empty then
       set the behavior of pGroupObject to the behavior of tTargetObject
-    else if the behavior of stack pViewKind is not empty then
-      set the behavior of pGroupObject to the behavior of stack pViewKind
     end if
 
     local tTopLeft, tControlTopLeft, tWordOffset
