@@ -225,6 +225,8 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
     set the uEmbeddableViewKind of pGroupObject to pViewKind
     if the behavior of tTargetObject is not empty then
       set the behavior of pGroupObject to the behavior of tTargetObject
+    else
+      set the behavior of pGroupObject to empty
     end if
 
     local tTopLeft, tControlTopLeft, tWordOffset
