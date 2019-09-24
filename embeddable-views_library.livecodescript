@@ -100,7 +100,8 @@ Summary: Adds an embeddable view instance to the target object.
 
 Parameters:
 pViewKind: The kind of the view to embed.
-pTargetObject: A reference to a card or group that the view will be inserted into.
+pNewObjectName: The name to assign to the new group that is created.
+pWithinObject: A reference to a card or group that the view will be created in.
 pRect: Optional rect to assign to the new instance.
 
 Description:
@@ -111,14 +112,14 @@ Returns:
 it: Long id of group that was created
 the result: Error message
 */
-command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
+command embedViewsCreateViewInstance pViewKind, pNewObjectName, pWithinObject, pRect
   local tError, unloadViewStack, msgsAreLocked, tStack, tGroup
   local tDefaultStack, tCurrCard
 
   if not _doesViewResolve(pViewKind) then throw kEmbeddableViewDoesNotExist & ":" && pViewKind
   put not _viewIsInMemory(pViewKind) into unloadViewStack
 
-  put _resolveStack(pTargetObject) into tStack
+  put _resolveStack(pWithinObject) into tStack
 
   put the lockmessages into msgsAreLocked
   lock messages
@@ -126,18 +127,21 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
 
   reset the templategroup
 
-  if pTargetObject begins with "stack" or pTargetObject begins with "card" then
+  if pWithinObject begins with "stack" or pWithinObject begins with "card" then
     put the defaultStack into tDefaultStack
     set the defaultStack to the short name of tStack
-    if pTargetObject begins with "card" then
+    if pWithinObject begins with "card" then
       put the currentCard of tStack into tCurrCard
-      set the currentCard of tStack to the short name of pTargetObject
+      set the currentCard of tStack to the short name of pWithinObject
     end if
     create group
     put it into tGroup
-  else if pTargetObject begins with "group" then
-    create group in pTargetObject
+  else if pWithinObject begins with "group" then
+    create group in pWithinObject
     put it into tGroup
+  end if
+  if pNewObjectName is not empty then
+    set the name of tGroup to pNewObjectName
   end if
   set the margins of tGroup to 0
   set the borderwidth of tGroup to 0
@@ -150,7 +154,7 @@ command embedViewsCreateViewInstance pViewKind, pTargetObject, pRect
 
   if pRect is not a rect then
     local tLoc
-    put the loc of pTargetObject into tLoc
+    put the loc of pWithinObject into tLoc
     put item 1 of tLoc - 150 into item 1 of pRect
     put item 2 of tLoc - 150 into item 2 of pRect
     put item 1 of tLoc + 150 into item 3 of pRect
