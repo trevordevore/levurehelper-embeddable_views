@@ -255,6 +255,7 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
     end if
 
     unlock messages
+    dispatch "newView" to pGroupObject
     dispatch "resizeControl" to pGroupObject
 
     set the lockMessages to msgsAreLocked
