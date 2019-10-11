@@ -229,6 +229,14 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
       set the behavior of pGroupObject to empty
     end if
 
+    if the backgroundcolor of tTargetObject is not empty then
+      set the opaque of pGroupObject to true
+      set the backgroundcolor of pGroupObject to the backgroundcolor of tTargetObject
+    else
+      set the opaque of pGroupObject to false
+      set the backgroundcolor of pGroupObject to empty
+    end if
+
     local tTopLeft, tControlTopLeft, tWordOffset
 
     put the lockmessages into msgsAreLocked
