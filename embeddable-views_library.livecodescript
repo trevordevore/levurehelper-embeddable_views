@@ -347,23 +347,28 @@ end embedViewsUpdateViewInstances
 private command _updateViewInstances pKind
   local tError, tUpdatedViewStacksA
 
-  if tError is empty then
-    _updateViewInstancesInNonViewAppUIStacks pKind
-    put the result into tError
-  end if
-
-  if tError is empty then
-    put it into tUpdatedViewStacksA
-
-    _updateViewInstancesInViews pKind
-    put the result into tError
+  # Make sure that thrown errors are reported.
+  try
+    if tError is empty then
+      _updateViewInstancesInNonViewAppUIStacks pKind
+      put the result into tError
+    end if
 
     if tError is empty then
-      if it is an array then
-        union tUpdatedViewStacksA with it
+      put it into tUpdatedViewStacksA
+
+      _updateViewInstancesInViews pKind
+      put the result into tError
+
+      if tError is empty then
+        if it is an array then
+          union tUpdatedViewStacksA with it
+        end if
       end if
     end if
-  end if
+  catch tError
+
+  end try
 
   if tError is empty then
     return tUpdatedViewStacksA for value
