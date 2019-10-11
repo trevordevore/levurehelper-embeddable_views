@@ -229,13 +229,7 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
       set the behavior of pGroupObject to empty
     end if
 
-    if the backgroundcolor of tTargetObject is not empty then
-      set the opaque of pGroupObject to true
-      set the backgroundcolor of pGroupObject to the backgroundcolor of tTargetObject
-    else
-      set the opaque of pGroupObject to false
-      set the backgroundcolor of pGroupObject to empty
-    end if
+    _assignCardPropertiesToGroup tTargetObject, pGroupObject
 
     local tTopLeft, tControlTopLeft, tWordOffset
 
@@ -645,3 +639,56 @@ private function _resolveStack pTarget
 
   return tStack
 end _resolveStack
+
+
+/**
+Summary: Assigns properties of the embeddable view card to the group instance.
+
+Description:
+An embeddable view can have properties set on the card that carry over to the
+instance. Current properties are:
+
+- backgroundcolor
+- foregroundcolor
+- textfont
+- textsize
+- textstyle
+
+Note that if the `backgroundcolor` is set then the `opaque` of the instance will
+be `true`. Otherwise it will be `false`.
+
+Returns: nothing
+*/
+private command _assignCardPropertiesToGroup pCard, pGroup
+  if the backgroundcolor of pCard is not empty then
+    set the opaque of pGroup to true
+    set the backgroundcolor of pGroup to the backgroundcolor of pCard
+  else
+    set the opaque of pGroup to false
+    set the backgroundcolor of pGroup to empty
+  end if
+
+  if the foregroundColor of pCard is not empty then
+    set the foregroundColor of pGroup to the foregroundColor of pCard
+  else
+    set the foregroundColor of pGroup to empty
+  end if
+
+  if the textFont of pCard is not empty then
+    set the textFont of pGroup to the textFont of pCard
+  else
+    set the textFont of pGroup to empty
+  end if
+
+  if the textSize of pCard is not empty then
+    set the textSize of pGroup to the textSize of pCard
+  else
+    set the textSize of pGroup to empty
+  end if
+
+  if the textSize of pCard is not empty then
+    set the textSize of pGroup to the textSize of pCard
+  else
+    set the textSize of pGroup to empty
+  end if
+end _assignCardPropertiesToGroup
