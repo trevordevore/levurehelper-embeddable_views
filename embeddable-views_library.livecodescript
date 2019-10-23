@@ -257,7 +257,12 @@ command embedViewsInsertViewIntoInstance pViewKind, pGroupObject
     end if
 
     unlock messages
-    dispatch "newView" to pGroupObject
+
+    # Leverage the newGroup message here. This handler can be called when creating a
+    # new instance or updating an existing one. In either case, the instance is starting
+    # from scratch. A developer can use the `deleteGroup` message to cleanup when deleting
+    # the instance so balance that with `newGroup` when creating/reinitializing.
+    dispatch "newGroup" to pGroupObject
     dispatch "resizeControl" to pGroupObject
 
     set the lockMessages to msgsAreLocked
